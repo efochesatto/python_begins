@@ -5,22 +5,24 @@ def menuOperations():
     print("Informe a operação desejada:")
     op = input()
     opElements = op.split()
+    opElements[1] = int(opElements[1])
+    opElements[2] = int(opElements[2])
     res = None
-    match opElements[1]:
-        case 'add': res = operations.add(opElements[2],opElements[3])
-        case 'sub': res = operations.sub(opElements[2],opElements[3])
-        case 'mul': res = operations.mul(opElements[2],opElements[3])
-        case 'div': res = operations.div(opElements[2],opElements[3])
-        case 'din': res = operations.din(opElements[2],opElements[3])
-        case 'rst': res = operations.rst(opElements[2],opElements[3])
-        case 'pot': res = operations.pot(opElements[2],opElements[3])
-        case 'raz': res = operations.raz(opElements[2],opElements[3])
+    match opElements[0]:
+        case 'add': res = operations.add(opElements[1],opElements[2])
+        case 'sub': res = operations.sub(opElements[1],opElements[2])
+        case 'mul': res = operations.mul(opElements[1],opElements[2])
+        case 'div': res = operations.div(opElements[1],opElements[2])
+        case 'din': res = operations.din(opElements[1],opElements[2])
+        case 'rst': res = operations.rst(opElements[1],opElements[2])
+        case 'pot': res = operations.pot(opElements[1],opElements[2])
+        case 'raz': res = operations.raz(opElements[1],opElements[2])
     return res
 
 def menu():
     menu = True
     while(menu):
-        print("\n1) Realizar cálculo\n2)Ajuda\n3)Sobre\n0)Sair\nInforme a ação desejada:")
+        infos.menu()
         option = int(input())
         if (option == 1):
             print(f'O resultado é {menuOperations()}')
