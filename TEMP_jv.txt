@@ -1,0 +1,178 @@
+def printer(sequence):
+    print("\n")
+    print(f'{sequence[0]} | {sequence[1]} | {sequence[2]}')
+    print(f'{sequence[3]} | {sequence[4]} | {sequence[5]}')
+    print(f'{sequence[6]} | {sequence[7]} | {sequence[8]}')
+    print("\n")
+
+# Com base nas coordenadas iniciais, identifica o índice na lista de gravação dos valores das posições
+def identifyId(coords):            
+    return (3*(coords[0]-1))+(coords[1]-1)
+
+# Verifica se a posição que o jogador selecionou para a jogada ainda está disponível
+def idIsDisp(sequence,pos):
+    if (sequence[pos] == ' '):
+        return True
+    else:
+        return False
+
+# Estando a posição disponível, registra a jogada, conforme o identificador de cada jogador ("X" ou "O")
+def update(sequence,coords,player):
+    pos = identifyId(coords)
+    if (idIsDisp(sequence,pos)):
+        if (player == 1):
+            sequence[pos] = 'X'
+        else:
+            sequence[pos] = 'O'
+    return sequence
+
+# Checa se há sequência vencedora
+def winner(sequence):
+    if (sequence[0] == sequence[1] and sequence[0] == sequence[2]):
+        if (sequence[0] == 'X'):
+            return 1
+        elif (sequence[0] == 'O'):
+            return 2
+    elif (sequence[3] == sequence[4] and sequence[3] == sequence[5]):
+        if (sequence[3] == 'X'):
+            return 1
+        elif (sequence[3] == 'O'):
+            return 2
+    elif (sequence[6] == sequence[7] and sequence[6] == sequence[8]):
+        if (sequence[6] == 'X'):
+            return 1
+        elif (sequence[6] == 'O'):
+            return 2
+    elif (sequence[0] == sequence[3] and sequence[0] == sequence[6]):
+        if (sequence[0] == 'X'):
+            return 1
+        elif (sequence[0] == 'O'):
+            return 2
+    elif (sequence[1] == sequence[4] and sequence[1] == sequence[7]):
+        if (sequence[1] == 'X'):
+            return 1
+        elif (sequence[1] == 'O'):
+            return 2
+    elif (sequence[2] == sequence[5] and sequence[2] == sequence[8]):
+        if (sequence[2] == 'X'):
+            return 1
+        elif (sequence[2] == 'O'):
+            return 2
+    elif (sequence[0] == sequence[4] and sequence[0] == sequence[8]):
+        if (sequence[0] == 'X'):
+            return 1
+        elif (sequence[0] == 'O'):
+            return 2
+    elif (sequence[2] == sequence[4] and sequence[2] == sequence[6]):
+        if (sequence[2] == 'X'):
+            return 1
+        elif (sequence[2] == 'O'):
+            return 2
+    return 0
+
+
+
+
+
+--------------------------------------------------
+
+
+
+import board
+import messages
+
+def getPos(playerName):
+    pos = []
+    print(f"{playerName}, informe a sua jogada:\n")
+    pos.append(int(input('Linha: ')))
+    pos.append(int(input('Coluna: ')))
+    return pos
+
+def jogada(player, playerName, sequence):
+    print(f"Entrou na jogada com a sequence = {sequence}")
+    board.printer(sequence)
+    coords = getPos(playerName)
+    print(f'As coordenadas são {coords}')
+    pos = board.identifyId(coords)
+    print(f'Índice {pos}')
+    disp = board.idIsDisp(sequence,pos)
+    if (disp):
+        sequence = board.update(sequence,coords,player)
+    board.printer(sequence)
+    return sequence
+    
+def main(players): 
+    sequence = [' ',' ',' ',' ',' ',' ',' ',' ',' ']
+    print(f"A sequência de início é {sequence}")
+    continuePlay = 0
+    while (continuePlay == 0):
+        sequence = jogada(1,players[0],sequence)
+        continuePlay = board.winner(sequence)
+        if (continuePlay == 0):
+            sequence = jogada(2,players[1],sequence)
+            continuePlay = board.winner(sequence)
+    messages.winner(sequence,players)
+
+
+--------------------------------------------------
+
+
+import messages
+import controlPlay
+
+
+def getPlayers():
+    players = []
+    players.append(input("Nome do Jogador 1: "))
+    players.append(input("Nome do Jogador 2: "))
+    return players
+
+def menu():
+    a = None
+
+def main(): 
+    messages.welcome()
+    playing = True
+    while (playing):
+        opt = messages.menu()
+        if (opt == 1):
+            players = getPlayers()
+            print(f"O nome dos jogadores são: {players}")
+            controlPlay.main(players)
+        elif (opt == 2):
+            messages.rules()
+        elif (opt == 0):
+            playing = False
+        else:
+            print("A opção informada não é válida.")
+    messages.exit()
+
+main()
+
+
+
+
+--------------------------------------------------
+
+import board
+
+def welcome():
+    print("Seja bem-vindo(a) ao melhor do mundo dos games!")
+
+def menu(): 
+    print("\nPara continuar, informe uma das opções:\n1) Novo jogo\n2) Regras\n0) Sair\n")
+    opt = int(input())
+    return opt
+
+def winner(sequence,players):
+    playerWinnerId = board.winner(sequence)
+    playerWinnerName = players[(playerWinnerId-1)]
+    print(f"\n\nParabéns, {playerWinnerName}! Você é o vencedor!\n\n")
+    board.printer(sequence)
+
+def exit():
+    print("Até a próxima!")
+
+def rules(): 
+    print("Aqui vai ter a descrição das regras")
+
